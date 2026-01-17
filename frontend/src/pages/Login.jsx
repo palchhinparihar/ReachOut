@@ -2,19 +2,8 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { FiLogIn } from "react-icons/fi";
-
-const inputFields = [
-  { type: 'email', name: 'Email', placeholder: 'name@example.com' },
-  { type: 'password', name: 'Password', placeholder: '*******' },
-];
-
-const authProviders = [
-  { name: 'Google', provider: 'google', icon: FcGoogle },
-  { name: 'GitHub', provider: 'github', icon: FaGithub },
-];
+import { inputFields, authProviders } from '../data/inputData';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -45,7 +34,7 @@ export default function Login() {
     <section className="bg-gray-900 flex flex-col items-center justify-center min-h-screen">
       <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-lg shadow-blue-700 w-[95%] mx-auto md:w-[45%] lg:w-[30%]">
         <div>
-          <h2 className="text-2xl text-center mb-3 font-bold">Login</h2>
+          <h2 className="text-2xl md:text-4xl text-center mb-3 font-bold">Login</h2>
           <p className="text-gray-700 text-center mb-4">Please enter your credentials to log in.</p>
         </div>
 

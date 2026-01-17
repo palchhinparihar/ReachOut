@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/ui/Button';
+import { FiUserPlus } from "react-icons/fi";
+import { inputFields, authProviders } from '../data/inputData';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -28,55 +31,57 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSignup} className="bg-white p-6 rounded shadow-md w-80">
-        <h2 className="text-2xl mb-4 font-bold">Sign Up</h2>
-        <input
-          className="border p-2 mb-2 w-full"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <input
-          className="border p-2 mb-2 w-full"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
-        {error && <div className="text-red-500 mb-2">{error}</div>}
-        <button
-          className="bg-blue-600 text-white w-full py-2 rounded disabled:opacity-50"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? 'Signing up...' : 'Sign Up'}
-        </button>
-        <div className="my-4 flex flex-col gap-2">
-          <button
-            type="button"
-            className="bg-red-500 text-white w-full py-2 rounded"
-            onClick={() => handleOAuthSignup('google')}
-            disabled={loading}
-          >
-            Continue with Google
-          </button>
-          <button
-            type="button"
-            className="bg-gray-800 text-white w-full py-2 rounded"
-            onClick={() => handleOAuthSignup('github')}
-            disabled={loading}
-          >
-            Continue with GitHub
-          </button>
+    <section className="bg-gray-900 flex flex-col items-center justify-center min-h-screen">
+      <form onSubmit={handleSignup} className="bg-white p-6 rounded-lg shadow-lg shadow-blue-700 w-[95%] mx-auto md:w-[45%] lg:w-[30%]">
+        <div>
+          <h2 className="text-2xl md:text-4xl text-center mb-3 font-bold">Sign Up</h2>
+          <p className="text-gray-700 text-center mb-4">Create your account to get started.</p>
         </div>
-        <div className="mt-2 text-sm text-center">
+
+        {inputFields.map((field) => (
+          <>
+            <label key={field?.type} className="font-semibold text-gray-900">{field?.name}</label>
+            <input
+              key={field?.type}
+              className="border-b border-gray-300 mt-1 mb-4 py-2 w-full "
+              type={field?.type}
+              placeholder={field?.placeholder}
+              value={field?.type === 'email' ? email : password}
+              onChange={e => field?.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)}
+              required
+            />
+          </>
+        ))}
+
+        {error && <div className="text-red-500 mb-4">{error}</div>}
+
+        <Button loading={loading} texts={['Signing up...', 'Sign Up']} icon={FiUserPlus} />
+
+        <div className="flex justify-center items-center my-4">
+          <div className="border border-gray-300 w-18 lg:w-36"></div>
+          <div className="mx-4 text-sm md:text-base">or Continue with</div>
+          <div className="border border-gray-300 w-18 lg:w-36"></div>
+        </div>
+
+        <div className="my-4 flex justify-center gap-2">
+          {authProviders.map(({ name, provider, icon: Icon }) => (
+            <button
+              key={provider}
+              title={`Continue with ${name}`}
+              type="button"
+              className={`bg-gray-100 hover:bg-gray-300 transition duration-300 text-white py-2 rounded cursor-pointer group`}
+              onClick={() => handleOAuthSignup(provider)}
+              disabled={loading}
+            >
+              <Icon size={44} className={`group-hover:scale-105 my-2 mx-5 text-x rounded-full transition duration-200 ${provider === 'github' ? 'text-black' : ''}`} />
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-6 text-sm md:text-base text-center">
           Already have an account? <a href="/login" className="text-blue-600">Login</a>
         </div>
       </form>
-    </div>
+    </section>
   );
 }
