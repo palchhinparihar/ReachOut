@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { FiLogIn } from "react-icons/fi";
 import { inputFields, authProviders } from '../data/inputData';
@@ -22,6 +23,11 @@ export default function Login() {
     else navigate('/dashboard');
   };
 
+  const handleOnChange = (e, fieldType) => {
+    if (fieldType === 'email') setEmail(e.target.value);
+    else setPassword(e.target.value);
+  };
+
   const handleOAuthLogin = async (provider) => {
     setError('');
     setLoading(true);
@@ -39,18 +45,7 @@ export default function Login() {
         </div>
 
         {inputFields.map((field) => (
-          <>
-            <label key={field?.type} className="font-semibold text-gray-900">{field?.name}</label>
-            <input
-              key={field?.type}
-              className="border-b border-gray-300 mt-1 mb-4 py-2 w-full "
-              type={field?.type}
-              placeholder={field?.placeholder}
-              value={field?.type === 'email' ? email : password}
-              onChange={e => field?.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)}
-              required
-            />
-          </>
+          <Input key={field?.type} field={field} value={field?.type === 'email' ? email : password} handleOnChange={handleOnChange} />
         ))}
 
         {error && <div className="text-red-500 mb-4">{error}</div>}

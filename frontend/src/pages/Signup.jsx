@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { FiUserPlus } from "react-icons/fi";
 import { inputFields, authProviders } from '../data/inputData';
@@ -22,6 +23,11 @@ export default function Signup() {
     else navigate('/dashboard');
   };
 
+  const handleOnChange = (e, fieldType) => {
+    if (fieldType === 'email') setEmail(e.target.value);
+    else setPassword(e.target.value);
+  };
+
   const handleOAuthSignup = async (provider) => {
     setError('');
     setLoading(true);
@@ -39,18 +45,7 @@ export default function Signup() {
         </div>
 
         {inputFields.map((field) => (
-          <>
-            <label key={field?.type} className="font-semibold text-gray-900">{field?.name}</label>
-            <input
-              key={field?.type}
-              className="border-b border-gray-300 mt-1 mb-4 py-2 w-full "
-              type={field?.type}
-              placeholder={field?.placeholder}
-              value={field?.type === 'email' ? email : password}
-              onChange={e => field?.type === 'email' ? setEmail(e.target.value) : setPassword(e.target.value)}
-              required
-            />
-          </>
+          <Input key={field?.type} field={field} value={field?.type === 'email' ? email : password} handleOnChange={handleOnChange} />
         ))}
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -58,9 +53,9 @@ export default function Signup() {
         <Button loading={loading} texts={['Signing up...', 'Sign Up']} icon={FiUserPlus} />
 
         <div className="flex justify-center items-center my-4">
-          <div className="border border-gray-300 w-18 lg:w-36"></div>
+          <div className="border border-gray-300 w-18 lg:w-34"></div>
           <div className="mx-4 text-sm md:text-base">or Continue with</div>
-          <div className="border border-gray-300 w-18 lg:w-36"></div>
+          <div className="border border-gray-300 w-18 lg:w-34"></div>
         </div>
 
         <div className="my-4 flex justify-center gap-2">
