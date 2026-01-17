@@ -72,14 +72,6 @@ export default function Signup() {
           >
             Continue with GitHub
           </button>
-          <button
-            type="button"
-            className="bg-blue-700 text-white w-full py-2 rounded"
-            onClick={() => handleOAuthSignup('linkedin')}
-            disabled={loading}
-          >
-            Continue with LinkedIn
-          </button>
         </div>
         <div className="mt-2 text-sm text-center">
           Already have an account? <a href="/login" className="text-blue-600">Login</a>
