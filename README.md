@@ -21,20 +21,20 @@ ReachOut is a web application designed to connect individuals and organizations 
 
 ```
 frontend/
-    public/
-    src/
-        App.jsx, App.css, index.css, main.jsx
-        assets/
-        components/
-            Logout.jsx, ProtectedRoute.jsx, ui/ (Button.jsx, Input.jsx, Particles.jsx)
-        context/ (AuthContext.jsx)
-        data/ (applicationInputData.js, loginInputData.js)
-        hooks/
-        lib/ (supabaseClient.js)
-        pages/ (ApplicationForm.jsx, ApplicationList.jsx, Dashboard.jsx, Login.jsx, Navbar.jsx, Signup.jsx)
-    package.json
-    vite.config.js
-    eslint.config.js
+  public/
+  src/
+    App.jsx, App.css, index.css, main.jsx
+    assets/
+    components/
+        Logout.jsx, ProtectedRoute.jsx, ui/ (Button.jsx, Input.jsx, Particles.jsx)
+    context/ (AuthContext.jsx)
+    data/ (applicationInputData.js, loginInputData.js)
+    hooks/
+    lib/ (supabaseClient.js)
+    pages/ (ApplicationForm.jsx, ApplicationList.jsx, Dashboard.jsx, Login.jsx, Navbar.jsx, Signup.jsx)
+  package.json
+  vite.config.js
+  eslint.config.js
 ```
 
 ## Getting Started
