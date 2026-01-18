@@ -3,13 +3,21 @@ import { supabase } from '../lib/supabaseClient';
 import Input from '../components/ui/Input';
 import { fields, statusOptions } from '../data/applicationInputData';
 import { FiEdit, FiTrash2, FiSave, FiX } from 'react-icons/fi';
+import { getDaysSince, getFollowUpStatus } from '../lib/followUpUtils';
+import FollowUpBadge from '../components/ui/FollowUpBadge';
 
 const ApplicationList = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({ company: '', role: '', deadline: '', status: '', notes: '' });
+  const [editForm, setEditForm] = useState({
+    company: '',
+    role: '',
+    deadline: '',
+    status: '',
+    notes: ''
+  });
   const [actionLoading, setActionLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -22,13 +30,14 @@ const ApplicationList = () => {
     setLoading(true);
     setError('');
     try {
-      const { data, error: supabaseError } = await supabase
+      const { data, error } = await supabase
         .from('applications')
         .select('*')
         .order('created_at', { ascending: false });
-      if (supabaseError) throw supabaseError;
+
+      if (error) throw error;
       setApplications(data || []);
-    } catch (err) {
+    } catch {
       setError('Failed to fetch applications.');
     } finally {
       setLoading(false);
@@ -38,15 +47,10 @@ const ApplicationList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this application?')) return;
     setActionLoading(true);
-    setError('');
     try {
-      const { error: supabaseError } = await supabase
-        .from('applications')
-        .delete()
-        .eq('id', id);
-      if (supabaseError) throw supabaseError;
+      await supabase.from('applications').delete().eq('id', id);
       setApplications(applications.filter(app => app.id !== id));
-    } catch (err) {
+    } catch {
       setError('Failed to delete application.');
     } finally {
       setActionLoading(false);
@@ -66,21 +70,18 @@ const ApplicationList = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
+    setEditForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleEditSave = async (id) => {
     setActionLoading(true);
-    setError('');
     try {
-      const { error: supabaseError } = await supabase
-        .from('applications')
-        .update(editForm)
-        .eq('id', id);
-      if (supabaseError) throw supabaseError;
-      setApplications(applications.map(app => app.id === id ? { ...app, ...editForm } : app));
+      await supabase.from('applications').update(editForm).eq('id', id);
+      setApplications(applications.map(app =>
+        app.id === id ? { ...app, ...editForm } : app
+      ));
       setEditingId(null);
-    } catch (err) {
+    } catch {
       setError('Failed to update application.');
     } finally {
       setActionLoading(false);
@@ -92,7 +93,7 @@ const ApplicationList = () => {
     setEditForm({ company: '', role: '', deadline: '', status: '', notes: '' });
   };
 
-  // Filter and sort applications
+  // Filter + sort
   let filteredApps = applications;
   if (statusFilter) {
     filteredApps = filteredApps.filter(app => app.status === statusFilter);
@@ -103,23 +104,25 @@ const ApplicationList = () => {
     return new Date(a.deadline) - new Date(b.deadline);
   });
 
-  if (loading) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-gray-500 py-8 animate-pulse">Loading applications...</p>;
-  if (error) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-red-500 py-8">{error}</p>;
-  if (!applications.length) return <p className="min-h-[70vh] flex justify-center items-center text-3xl md:text-4xl text-center text-gray-500 py-8">No applications yet — add one to get started.</p>;
+  if (loading) return <p className="min-h-[70vh] flex items-center justify-center text-3xl text-gray-500 animate-pulse">Loading applications...</p>;
+  if (error) return <p className="min-h-[70vh] flex items-center justify-center text-3xl text-red-500">{error}</p>;
+  if (!applications.length) return <p className="min-h-[70vh] flex items-center justify-center text-3xl text-gray-500">No applications yet.</p>;
 
   return (
-    <section className="application-list overflow-x-auto w-full max-w-6xl mx-auto mt-14">
-      <h1 className="text-3xl md:text-5xl text-center font-bold text-blue-500 mb-4">Your Applications</h1>
-      <p className="text-base text-center text-gray-400 mb-10">Your application journey at a glance.</p>
+    <section className="overflow-x-auto w-full max-w-6xl mx-auto mt-14">
+      <h1 className="text-3xl md:text-5xl text-center font-bold text-blue-500 mb-4">
+        Your Applications
+      </h1>
+      <p className="text-center text-gray-400 mb-10">
+        Your application journey at a glance.
+      </p>
 
-      {/* Filter by status */}
-      <div className="flex flex-col md:flex-row items-center justify-end gap-2 mb-4 mr-2">
-        <label htmlFor="statusFilter" className="font-semibold text-gray-300">Filter by status:</label>
+      {/* Filter */}
+      <div className="flex items-center justify-end mb-4">
+        <h3 className="mr-2 text-gray-300 font-semibold">Filter by Status:</h3>
         <select
-          id="statusFilter"
-          name="statusFilter"
           value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
+          onChange={(e) => setStatusFilter(e.target.value)}
           className="border rounded px-2 py-1 bg-gray-900 text-white"
         >
           <option value="">All</option>
@@ -130,110 +133,101 @@ const ApplicationList = () => {
       </div>
 
       <table className="min-w-full shadow-lg rounded-lg overflow-hidden">
-        <thead className="text-white border-b border-gray-700">
+        <thead className="border-b border-gray-700">
           <tr>
-            {['Company', 'Role', 'Deadline', 'Status', 'Notes', 'Actions'].map(header => (
-              <th key={header} className="py-3 px-4 text-left">{header}</th>
+            {['Company', 'Role', 'Deadline', 'Status', 'Follow-up', 'Notes', 'Actions'].map(h => (
+              <th key={h} className="py-3 px-4 text-left">{h}</th>
             ))}
           </tr>
         </thead>
+
         <tbody>
-          {filteredApps.length === 0 ? (
-            <tr>
-              <td colSpan={7} className="text-center text-gray-400 py-8">No applications match this filter.</td>
-            </tr>
-          ) : filteredApps.map((app, idx) => (
-            <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}>
-              {editingId === app.id ? (
-                <>
-                  {fields.map(field => (
-                    <td className="py-2 px-4" key={field.key}>
-                      <Input
-                        key={field.key}
-                        isShowLabel={false}
-                        field={{
-                          ...field,
-                          value: editForm[field.key],
-                          handleOnChange: (e) => handleEditChange({ target: { name: field.key, value: e.target.value } })
-                        }}
-                        value={editForm[field.key]}
-                        handleOnChange={(e) => handleEditChange({ target: { name: field.key, value: e.target.value } })}
+          {filteredApps.map((app, idx) => {
+            const days = getDaysSince(app.created_at);
+            const followUpStatus = getFollowUpStatus(days, app.status);
+
+            return (
+              <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}>
+                {editingId === app.id ? (
+                  <>
+                    {fields.map(field => (
+                      <td key={field.key} className="px-4 py-2">
+                        <Input
+                          isShowLabel={false}
+                          field={{
+                            ...field,
+                            value: editForm[field.key],
+                            handleOnChange: (e) =>
+                              handleEditChange({ target: { name: field.key, value: e.target.value } })
+                          }}
+                        />
+                      </td>
+                    ))}
+
+                    {/* Status */}
+                    <td className="px-4 py-2">
+                      <select
+                        name="status"
+                        value={editForm.status}
+                        onChange={handleEditChange}
+                        className="w-full bg-black border rounded p-2"
+                      >
+                        {statusOptions.map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                    </td>
+
+                    {/* Follow-up placeholder */}
+                    <td className="px-4 py-2 text-gray-400 italic">Auto</td>
+
+                    {/* Notes */}
+                    <td className="px-4 py-2">
+                      <textarea
+                        name="notes"
+                        value={editForm.notes}
+                        onChange={handleEditChange}
+                        className="w-full bg-black border rounded p-2"
                       />
                     </td>
-                  ))}
-                  <td className="py-2 px-4">
-                    <select
-                      name="status"
-                      value={editForm.status}
-                      onChange={handleEditChange}
-                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
-                    >
-                      <option value="" className="bg-black">Select Status</option>
-                      {statusOptions.map(opt => (
-                        <option key={opt} value={opt} className="bg-black">{opt}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="py-2 px-4">
-                    <textarea
-                      name="notes"
-                      placeholder="Anything you want to remember..."
-                      value={editForm.notes}
-                      onChange={handleEditChange}
-                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
-                    />
-                  </td>
-                  <td className="py-2 px-4">
-                    <button
-                      className="text-green-500 cursor-pointer mr-2 hover:scale-105 transition duration-300"
-                      onClick={() => handleEditSave(app.id)}
-                      disabled={actionLoading}
-                      title="Save"
-                    >
-                      <FiSave size={24} />
-                    </button>
-                    <button
-                      className="text-red-500 disabled:opacity-50 cursor-pointer hover:scale-105 transition duration-300"
-                      onClick={handleEditCancel}
-                      disabled={actionLoading}
-                      title="Cancel"
-                    >
-                      <FiX size={24} />
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="py-2 px-4">{app.company}</td>
-                  <td className="py-2 px-4">{app.role}</td>
-                  <td className="py-2 px-4">{app.deadline}</td>
-                  <td className={
-                    `py-2 px-4 font-semibold ` +
-                    (app.status === 'Accepted' ? 'text-green-600' : app.status === 'Rejected' ? 'text-red-600' : app.status === 'Interview' ? 'text-yellow-600' : 'text-blue-600')
-                  }>{app.status}</td>
-                  <td className="py-2 px-4 max-w-xs truncate">{app.notes}</td>
-                  <td className="py-2 px-4">
-                    <button
-                      className="text-blue-500 disabled:opacity-50 cursor-pointer mr-2 hover:scale-105 transition duration-300"
-                      onClick={() => handleEditClick(app)}
-                      disabled={actionLoading}
-                      title="Edit"
-                    >
-                      <FiEdit size={24} />
-                    </button>
-                    <button
-                      className="text-red-500 disabled:opacity-50 cursor-pointer hover:scale-105 transition duration-300"
-                      onClick={() => handleDelete(app.id)}
-                      disabled={actionLoading}
-                      title="Delete"
-                    >
-                      <FiTrash2 size={24} />
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+
+                    {/* Actions */}
+                    <td className="px-4 py-2">
+                      <button onClick={() => handleEditSave(app.id)} className="text-green-500 mr-2">
+                        <FiSave size={22} />
+                      </button>
+                      <button onClick={handleEditCancel} className="text-red-500">
+                        <FiX size={22} />
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className="px-4 py-2">{app.company}</td>
+                    <td className="px-4 py-2">{app.role}</td>
+                    <td className="px-4 py-2">{app.deadline}</td>
+                    <td className="px-4 py-2 font-semibold">{app.status}</td>
+
+                    {/* ⭐ Follow-up intelligence */}
+                    <td className="px-4 py-2">
+                      <FollowUpBadge status={followUpStatus} />
+                    </td>
+
+                    <td className="px-4 py-2 truncate max-w-xs">{app.notes}</td>
+
+                    <td className="px-4 py-2">
+                      <button onClick={() => handleEditClick(app)} className="text-blue-500 mr-2">
+                        <FiEdit size={22} />
+                      </button>
+                      <button onClick={() => handleDelete(app.id)} className="text-red-500">
+                        <FiTrash2 size={22} />
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

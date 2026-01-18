@@ -12,13 +12,27 @@ ReachOut is a full-stack web application designed to connect individuals and org
 - Modern design and smooth user experience
 
 ## Tech Stack
-- **Frontend:** React, Vite, JavaScript, CSS
-- **Backend:** Node.js, Express
+- **Frontend:** React, Vite, Tailwind CSS
 - **Database & Auth:** Supabase
 
 ## Project Structure
-- `frontend/` - React-based frontend application
-- `backend/` - Node.js backend server
+```
+frontend/
+    public/
+    src/
+        App.jsx, App.css, index.css, main.jsx
+        assets/
+        components/
+            Logout.jsx, ProtectedRoute.jsx, ui/ (Button.jsx, Input.jsx, Particles.jsx)
+        context/ (AuthContext.jsx)
+        data/ (applicationInputData.js, loginInputData.js)
+        hooks/
+        lib/ (supabaseClient.js)
+        pages/ (ApplicationForm.jsx, ApplicationList.jsx, Dashboard.jsx, Login.jsx, Navbar.jsx, Signup.jsx)
+    package.json
+    vite.config.js
+    eslint.config.js
+```
 
 ## Getting Started
 
@@ -32,19 +46,21 @@ ReachOut is a full-stack web application designed to connect individuals and org
     git clone https://github.com/yourusername/ReachOut.git
     cd ReachOut
     ```
-2. Install dependencies for both frontend and backend:
+2. Install dependencies:
     ```bash
     cd frontend
     npm install
     ```
 
 ### Running the App
+
 Start the frontend development server:
 ```bash
 cd frontend
 npm run dev
 ```
 The frontend will be available at [http://localhost:5173](http://localhost:5173).
+
 
 ## Hack United Hackathon Submission
 - Team: Solo
