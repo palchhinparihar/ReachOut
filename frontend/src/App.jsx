@@ -3,11 +3,12 @@ import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import Logout from './components/Logout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-import Navbar from './pages/Navbar.jsx';
+import Navbar from './components/Navbar.jsx';
 import Particles from './components/ui/Particles.jsx';
 import Dashboard from './pages/Dashboard.jsx'
 import ApplicationForm from './pages/ApplicationForm.jsx';
 import ApplicationList from './pages/ApplicationList.jsx';
+import FollowUp from './pages/FollowUp.jsx';
 
 function App() {
   return (
@@ -45,6 +46,12 @@ function App() {
           <ProtectedRoute>
             <Navbar />
             <ApplicationList />
+          </ProtectedRoute>
+        } />
+        <Route path="/followup" element={
+          <ProtectedRoute>
+            <Navbar />
+            <FollowUp />
           </ProtectedRoute>
         } />
         <Route path="*" element={
