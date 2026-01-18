@@ -18,6 +18,7 @@ const ResumeTips = () => (
         {resumeTips.map((tip, index) => (
           <div
             key={index}
+            data-aos="fade-up"
             className="bg-black/40 border border-gray-600 rounded-lg p-4"
           >
             <h3 className="font-semibold text-blue-400 mb-1">

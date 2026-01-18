@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+
 // components
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import Navbar from './components/Navbar.jsx';
 import About from './components/About.jsx';
 import Logout from './components/Logout.jsx';
@@ -20,9 +23,21 @@ import ApplicationForm from './pages/ApplicationForm.jsx';
 import ApplicationList from './pages/ApplicationList.jsx';
 import FollowUp from './pages/FollowUp.jsx';
 
+// animations
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 function App() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
+
   return (
     <div className="relative min-h-screen">
+      <ScrollToTop />
       <div className="fixed top-0 left-0 w-full h-full -z-10">
         <LiquidEther
           enabledWaves={['top', 'middle', 'bottom']}

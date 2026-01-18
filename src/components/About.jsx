@@ -23,7 +23,7 @@ const About = () => {
           <span className="font-semibold text-blue-400">ReachOut</span> is your all-in-one companion for managing job and program applications. Our mission is to help you stay organized, follow up professionally, and access the best resources for every step of your journey.
         </p>
         <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-gray-900/80 rounded-2xl shadow-xl p-8 hover:scale-110 transition duration-300">
+          <div data-aos="fade-right" className="bg-gray-900/80 rounded-2xl shadow-xl p-8 hover:scale-110 transition duration-300">
             <h2 className="text-xl font-semibold text-white mb-3 flex items-center gap-2">
               <FiCheckCircle size={20} className="text-green-500" />
               Key Features
@@ -34,7 +34,7 @@ const About = () => {
               ))}
             </ul>
           </div>
-          <div className="bg-gray-900/80 rounded-2xl shadow-xl p-8 hover:scale-110 transition duration-300">
+          <div data-aos="fade-left" className="bg-gray-900/80 rounded-2xl shadow-xl p-8 hover:scale-110 transition duration-300">
             <h2 className="text-xl font-semibold text-white mb-3 flex items-center gap-2">
               <FiInfo size={20} className="text-yellow-400" />
               Why ReachOut?
