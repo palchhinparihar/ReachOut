@@ -50,7 +50,7 @@ export default function Login() {
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
-        <Button loading={loading} texts={['Logging in...', 'Login']} icon={FiLogIn} />
+        <Button loading={loading} texts={['Logging in...', 'Login']} icon={FiLogIn} disabled={!email || !password} />
 
         <div className="flex justify-center items-center my-4">
           <div className="border border-gray-300 w-18 lg:w-30"></div>

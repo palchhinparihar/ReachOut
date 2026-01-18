@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { FiLogOut } from 'react-icons/fi';
 
@@ -12,30 +12,35 @@ const navLinks = [
 
 const Navbar = () => {
   const { user } = useAuth();
-  const location = useLocation();
+  // console.log(user)
 
   return (
     <nav className="w-full lg:w-[75%] mx-auto md:rounded-full lg:border-2 md:border-blue-800 bg-black/10 backdrop-blur-md shadow sticky top-0 lg:top-4 z-50 lg:px-10 flex justify-between items-center h-16 mb-6">
-      <div className="font-bold text-xl md:text-2xl tracking-wide">
-        <Link to="/" className="text-purple-400 md:text-purple-500">ReachOut</Link>
-      </div>
-      <div className="flex gap-6 items-center">
+      <div className="flex gap-6 text-xs md:text-base items-center">
+        <div className="font-bold text-xl md:text-2xl tracking-wide">
+          <Link to="/" className="text-purple-400 md:text-purple-500">ReachOut</Link>
+        </div>
         {user && navLinks.map(link => (
-          <Link
+          <NavLink
             key={link.to}
             to={link.to}
-            className={`hover:text-blue-200 transition font-medium ${location.pathname === link.to ? 'text-blue-500' : ''}`}
+            className={({ isActive }) =>
+              `hover:text-blue-200 transition font-medium ${isActive ? 'text-blue-500' : ''}`
+            }
           >
             {link.label}
-          </Link>
+          </NavLink>
         ))}
-        {user && (
-          <Link to="/logout" className="flex justify-center items-center gap-1 border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white font-semibold transition">
-            Logout
+      </div>
+
+      {user && (
+        <div className="flex items-center gap-2">
+          <p>Welcome, {user?.email.split('@')[0]}</p>
+          <Link to="/logout" title="Wanna log out?" className="flex justify-center items-center gap-1 border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white font-semibold transition">
             <FiLogOut size={20} />
           </Link>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };

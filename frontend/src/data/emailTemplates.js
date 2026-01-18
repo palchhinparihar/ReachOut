@@ -1,3 +1,17 @@
+export const subjectTemplates = {
+  Applied: ({ role, company }) =>
+    `Following up on my application for ${role} at ${company}`,
+
+  Interview: ({ role, company }) =>
+    `Thank you for the interview – ${role} at ${company}`,
+
+  Accepted: ({ role, company }) =>
+    `Acceptance of offer – ${role} at ${company}`,
+
+  Rejected: ({ role, company }) =>
+    `Thank you for the opportunity – ${role} at ${company}`,
+};
+
 export const emailTemplates = {
   Accepted: ({ company, role, name }) => `
 Hi Hiring Team,
