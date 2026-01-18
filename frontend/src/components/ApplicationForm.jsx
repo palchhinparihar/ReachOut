@@ -41,11 +41,11 @@ const ApplicationForm = () => {
   };
 
   return (
-    <section className="min-h-[70vh] flex flex-col justify-center items-center text-black rounded-lg p-6 mt-10">
+    <section className="min-h-[70vh] flex flex-col justify-center items-center rounded-lg p-6 mt-10">
       <h1 className="text-3xl md:text-5xl font-bold text-blue-500 mb-4">Add New Application</h1>
       <p className="text-base text-gray-400 mb-10">Drop all your stress here and focus on your next big opportunity!</p>
 
-      <form onSubmit={onSubmit} className="bg-white shadow-lg rounded-lg p-6 mb-8 w-full max-w-xl mx-auto flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="bg-gray-900 shadow-lg rounded-lg p-6 mb-8 w-full max-w-2xl mx-auto flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fields.map(field => (
             <Input
@@ -62,29 +62,29 @@ const ApplicationForm = () => {
             />
           ))}
           <div className="flex flex-col">
-            <label className="font-semibold text-gray-900">Status</label>
+            <label className="font-semibold text-gray-300">Status</label>
             <select
               name="status"
               value={formData.status}
               onChange={onChange}
               required
-              className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white rounded-md pl-1"
+              className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
             >
-              <option value="">Select Status</option>
+              <option value="" className="bg-black">Select Status</option>
               {statusOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
+                <option key={opt} value={opt} className="bg-black">{opt}</option>
               ))}
             </select>
           </div>
         </div>
         <div>
-          <label className="font-semibold text-gray-900">Notes (optional)</label>
+          <label className="font-semibold text-gray-300">Notes (optional)</label>
           <textarea
             name="notes"
-            placeholder="Notes (optional)"
+            placeholder="Anything you want to remember..."
             value={formData.notes}
             onChange={onChange}
-            className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white rounded-md pl-1"
+            className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
           />
         </div>
         {error && <div className="text-red-600 font-semibold mb-2">{error}</div>}

@@ -53,9 +53,9 @@ export default function Signup() {
         <Button loading={loading} texts={['Signing up...', 'Sign Up']} icon={FiUserPlus} />
 
         <div className="flex justify-center items-center my-4">
-          <div className="border border-gray-300 w-18 lg:w-34"></div>
+          <div className="border border-gray-300 w-18 lg:w-30"></div>
           <div className="mx-4 text-sm md:text-base">or Continue with</div>
-          <div className="border border-gray-300 w-18 lg:w-34"></div>
+          <div className="border border-gray-300 w-18 lg:w-30"></div>
         </div>
 
         <div className="my-4 flex justify-center gap-2">

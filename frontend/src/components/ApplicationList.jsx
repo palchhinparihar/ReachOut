@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Input from './ui/Input';
-import Button from './ui/Button';
 import { fields, statusOptions } from '../data/applicationInputData';
 import { FiEdit, FiTrash2, FiSave, FiX } from 'react-icons/fi';
 
