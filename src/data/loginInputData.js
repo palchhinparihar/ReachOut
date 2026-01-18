@@ -2,8 +2,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 export const inputFields = [
-  { type: 'email', name: 'Email', placeholder: 'name@example.com' },
-  { type: 'password', name: 'Password', placeholder: '*******' },
+  { type: 'email', name: 'Email', key: 'email', placeholder: 'name@example.com' },
+  { type: 'password', name: 'Password', key: 'password', placeholder: '*******' },
 ];
 
 export const authProviders = [
