@@ -12,10 +12,9 @@ const navLinks = [
 
 const Navbar = () => {
   const { user } = useAuth();
-  // console.log(user)
 
   return (
-    <nav className="w-full lg:w-[75%] mx-auto md:rounded-full lg:border-2 md:border-blue-800 bg-black/10 backdrop-blur-md shadow sticky top-0 lg:top-4 z-50 lg:px-10 flex justify-between items-center h-16 mb-6">
+    <nav className="w-full lg:w-[75%] backdrop-blur-xl bg-black/10 mx-auto md:rounded-full lg:border-2 md:border-blue-800 shadow sticky top-0 lg:top-4 z-50 lg:px-10 flex justify-between items-center h-16 mb-6">
       <div className="flex gap-6 text-xs md:text-base items-center">
         <div className="font-bold text-xl md:text-2xl tracking-wide">
           <Link to="/" className="text-purple-400 md:text-purple-500">ReachOut</Link>
@@ -35,7 +34,7 @@ const Navbar = () => {
 
       {user && (
         <div className="flex items-center gap-2">
-          <p>Welcome, {user?.email.split('@')[0]}</p>
+          <p>Welcome, {(user?.name && user?.name.split(' ')[0]) || user?.email.split('@')[0]}</p>
           <Link to="/logout" title="Wanna log out?" className="flex justify-center items-center gap-1 border border-red-500 text-red-500 px-3 py-1.5 rounded hover:bg-red-500 hover:text-white font-semibold transition">
             <FiLogOut size={20} />
           </Link>

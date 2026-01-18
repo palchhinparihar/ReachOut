@@ -1,10 +1,15 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import Login from './pages/Login.jsx';
-import Signup from './pages/Signup.jsx';
-import Logout from './components/Logout.jsx';
+// components
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Navbar from './components/Navbar.jsx';
+import About from './components/ui/About.jsx';
+import Logout from './components/Logout.jsx';
 import Particles from './components/ui/Particles.jsx';
+import Footer from './components/Footer.jsx';
+
+// pages
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
 import Dashboard from './pages/Dashboard.jsx'
 import ApplicationForm from './pages/ApplicationForm.jsx';
 import ApplicationList from './pages/ApplicationList.jsx';
@@ -30,28 +35,40 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/about" element={
+          <ProtectedRoute>
+            <Navbar />
+            <About />
+            <Footer />
+          </ProtectedRoute>
+        } />
+
         <Route path="/" element={
           <ProtectedRoute>
             <Navbar />
             <Dashboard />
+            <Footer />
           </ProtectedRoute>
         } />
         <Route path="/form" element={
           <ProtectedRoute>
             <Navbar />
             <ApplicationForm />
+            <Footer />
           </ProtectedRoute>
         } />
         <Route path="/applications" element={
           <ProtectedRoute>
             <Navbar />
             <ApplicationList />
+            <Footer />
           </ProtectedRoute>
         } />
         <Route path="/followup" element={
           <ProtectedRoute>
             <Navbar />
             <FollowUp />
+            <Footer />
           </ProtectedRoute>
         } />
         <Route path="*" element={

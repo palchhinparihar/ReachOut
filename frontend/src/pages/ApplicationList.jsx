@@ -109,7 +109,7 @@ const ApplicationList = () => {
   if (!applications.length) return <p className="min-h-[70vh] flex items-center justify-center text-3xl text-gray-500">No applications yet.</p>;
 
   return (
-    <section className="overflow-x-auto w-full max-w-6xl mx-auto mt-14">
+    <section className="min-h-[70vh] overflow-x-auto w-full max-w-6xl mx-auto mt-14">
       <h1 className="text-3xl md:text-5xl text-center font-bold text-blue-500 mb-4">
         Your Applications
       </h1>
