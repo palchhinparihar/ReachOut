@@ -37,10 +37,10 @@ export default function Login() {
   };
 
   return (
-    <section className="bg-gray-900 flex flex-col items-center justify-center min-h-screen">
+    <section className="text-black flex flex-col items-center justify-center min-h-screen">
       <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-lg shadow-blue-700 w-[95%] mx-auto md:w-[45%] lg:w-[30%]">
         <div>
-          <h2 className="text-2xl md:text-4xl text-center mb-3 font-bold">Login</h2>
+          <h2 className="text-blue-500 text-2xl md:text-4xl text-center mb-3 font-bold">Login</h2>
           <p className="text-gray-700 text-center mb-4">Please enter your credentials to log in.</p>
         </div>
 

@@ -3,29 +3,57 @@ import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import Logout from './pages/Logout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-
-function Dashboard() {
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">ReachOut Dashboard</h1>
-      <Link to="/logout" className="text-blue-600">Logout</Link>
-    </div>
-  );
-}
+import Navbar from './pages/Navbar.jsx';
+import Particles from './components/ui/Particles.jsx';
+import Dashboard from './pages/Dashboard.jsx'
+import ApplicationForm from './components/ApplicationForm.jsx';
+import ApplicationList from './components/ApplicationList.jsx';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="*" element={<Login />} />
-    </Routes>
+    <div className="relative min-h-screen">
+      <div className="fixed top-0 left-0 w-full h-full -z-10">
+        <Particles
+          particleColors={['#ffffff', '#ffffff']}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
+      
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Navbar />
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/form" element={
+          <ProtectedRoute>
+            <Navbar />
+            <ApplicationForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/applications" element={
+          <ProtectedRoute>
+            <Navbar />
+            <ApplicationList />
+          </ProtectedRoute>
+        } />
+        <Route path="*" element={
+          <ProtectedRoute>
+            <Login />
+          </ProtectedRoute>
+        } />
+      </Routes>
+    </div>
   );
 }
 
