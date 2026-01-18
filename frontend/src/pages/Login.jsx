@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { FiLogIn } from "react-icons/fi";
-import { inputFields, authProviders } from '../data/inputData';
+import { inputFields, authProviders } from '../data/loginInputData';
 
 export default function Login() {
   const [email, setEmail] = useState('');

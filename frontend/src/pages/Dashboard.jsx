@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const motivationalQuotes = [
   "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.",
@@ -22,6 +23,10 @@ const Dashboard = () => {
       <h1 className="text-3xl md:text-8xl font-bold text-blue-500 mb-4">Welcome to ReachOut!</h1>
       <p className="text-lg italic text-indigo-500 mb-6 text-center">{quote}</p>
       <p className="text-base text-gray-400">We hope you have a wonderful and productive day!</p>
+
+      <Link to="/form" className="mt-8 font-semibold">
+        Your way to add applications starts <span className="text-blue-500 hover:underline gover:underline-offset-4">here</span>!
+      </Link>
     </div>
   );
 };

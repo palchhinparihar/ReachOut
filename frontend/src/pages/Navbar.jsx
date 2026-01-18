@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiLogIn, FiLogOut } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
 
 const navLinks = [
   { to: '/', label: 'Dashboard' },
@@ -15,8 +15,8 @@ const Navbar = () => {
 
   return (
     <nav className="w-full lg:w-[75%] mx-auto md:rounded-full lg:border-2 md:border-blue-800 bg-black/10 backdrop-blur-md shadow sticky top-0 lg:top-4 z-50 lg:px-10 flex justify-between items-center h-16 mb-6">
-      <div className="font-bold text-xl tracking-wide">
-        <Link to="/" className="hover:text-blue-200">ReachOut</Link>
+      <div className="font-bold text-xl md:text-2xl tracking-wide">
+        <Link to="/" className="text-purple-400 md:text-purple-500">ReachOut</Link>
       </div>
       <div className="flex gap-6 items-center">
         {user && navLinks.map(link => (
