@@ -118,7 +118,7 @@ const ApplicationList = () => {
       </p>
 
       {/* Filter */}
-      <div className="flex items-center justify-end mb-4">
+      <div className="flex items-center justify-end mb-4 mr-2">
         <h3 className="mr-2 text-gray-300 font-semibold">Filter by Status:</h3>
         <select
           value={statusFilter}

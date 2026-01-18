@@ -5,7 +5,7 @@ import { FiLogOut } from 'react-icons/fi';
 
 const navLinks = [
   { to: '/', label: 'Dashboard' },
-  { to: '/form', label: 'Application Form' },
+  { to: '/form', label: 'Add Application' },
   { to: '/applications', label: 'Applications' },
 ];
 
