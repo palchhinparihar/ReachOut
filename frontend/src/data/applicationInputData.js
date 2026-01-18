@@ -18,6 +18,7 @@ export const fields = [
     type: 'date',
     placeholder: 'Deadline',
     key: 'deadline',
+    min: new Date().toISOString().split('T')[0],
     required: true,
   },
 ];

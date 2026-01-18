@@ -10,6 +10,7 @@ const Input = ({ field, value, handleOnChange, isShowLabel = true }) => {
         type={field?.type}
         placeholder={field?.placeholder}
         value={value}
+        min={field?.min || undefined}
         onChange={e => handleOnChange(e, field?.type)}
         required
       />

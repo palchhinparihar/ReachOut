@@ -91,17 +91,17 @@ const ApplicationList = () => {
     setEditForm({ company: '', role: '', deadline: '', status: '', notes: '' });
   };
 
-  if (loading) return <p className="text-center text-gray-500 py-8">Loading applications...</p>;
-  if (error) return <p className="text-center text-red-500 py-8">{error}</p>;
-  if (!applications.length) return <p className="text-center text-gray-500 py-8">No applications found.</p>;
+  if (loading) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-gray-500 py-8 animate-pulse">Loading applications...</p>;
+  if (error) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-red-500 py-8">{error}</p>;
+  if (!applications.length) return <p className="min-h-[70vh] flex justify-center items-center text-3xl md:text-4xl text-center text-gray-500 py-8">No applications found.</p>;
 
   return (
-    <section className="text-black application-list overflow-x-auto w-full max-w-6xl mx-auto mt-14">
+    <section className="application-list overflow-x-auto w-full max-w-6xl mx-auto mt-14">
       <h1 className="text-3xl md:text-5xl text-center font-bold text-blue-500 mb-4">Your Applications</h1>
       <p className="text-base text-center text-gray-400 mb-10">Your application journey at a glance.</p>
 
-      <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <thead className="bg-blue-600 text-white">
+      <table className="min-w-full shadow-lg rounded-lg overflow-hidden">
+        <thead className="text-white border-b border-gray-700">
           <tr>
             {['Company', 'Role', 'Deadline', 'Status', 'Notes', 'Actions'].map(header => (
               <th key={header} className="py-3 px-4 text-left">{header}</th>
@@ -110,7 +110,7 @@ const ApplicationList = () => {
         </thead>
         <tbody>
           {applications.map((app, idx) => (
-            <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+            <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}>
               {editingId === app.id ? (
                 <>
                   {fields.map(field => (
@@ -133,21 +133,21 @@ const ApplicationList = () => {
                       name="status"
                       value={editForm.status}
                       onChange={handleEditChange}
-                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white rounded-md pl-1"
+                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
                     >
-                      <option value="">Select Status</option>
+                      <option value="" className="bg-black">Select Status</option>
                       {statusOptions.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
+                        <option key={opt} value={opt} className="bg-black">{opt}</option>
                       ))}
                     </select>
                   </td>
                   <td className="py-2 px-4">
                     <textarea
                       name="notes"
-                      placeholder="Notes (optional)"
+                      placeholder="Anything you want to remember..."
                       value={editForm.notes}
                       onChange={handleEditChange}
-                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white rounded-md pl-1"
+                      className="border-b border-gray-300 mt-1 mb-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md pl-1"
                     />
                   </td>
                   <td className="py-2 px-4">
