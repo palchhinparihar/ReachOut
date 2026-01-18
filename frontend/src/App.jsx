@@ -2,7 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 // components
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Navbar from './components/Navbar.jsx';
-import About from './components/ui/About.jsx';
+import About from './components/About.jsx';
 import Logout from './components/Logout.jsx';
 import Particles from './components/ui/Particles.jsx';
 import Footer from './components/Footer.jsx';
