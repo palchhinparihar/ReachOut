@@ -67,7 +67,7 @@ const Footer = () => {
         </div>
 
         {/* Social Links */}
-        <div className="flex flex-col h-full justify-between items-end md:items-end">
+        <div className="flex flex-col h-full justify-between items-end">
           <div className="flex-1"></div>
           <div className="flex flex-col items-end">
             <h3 className="text-white font-semibold mb-3">Connect</h3>
@@ -84,7 +84,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="text-xs md:text-sm text-center mt-2 mb-6 pt-3 border-t border-gray-500 w-1/4 mx-auto text-gray-400">
+      <div className="text-xs md:text-sm text-center mt-2 mb-6 pt-3 border-t border-gray-500 w-full md:w-1/4 mx-auto text-gray-400">
         Made with {" "}
         <FaHeart className="inline text-red-500" />{" "}
         by Palchhin 

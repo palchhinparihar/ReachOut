@@ -20,7 +20,7 @@ const Dashboard = () => {
   const quote = getRandomQuote();
   return (
     <div className="flex flex-col items-center text-center justify-center min-h-[70vh] rounded-2xl shadow-lg p-8 mt-8">
-      <h1 className="text-3xl md:text-8xl font-bold text-blue-500 mb-4">Welcome to ReachOut!</h1>
+      <h1 className="text-5xl md:text-8xl font-bold text-blue-500 mb-4">Welcome to ReachOut!</h1>
       <p className="text-lg italic text-indigo-500 mb-6 text-center">{quote}</p>
       <p className="text-base text-gray-400">We hope you have a wonderful and productive day!</p>
 
