@@ -158,9 +158,10 @@ const ApplicationList = () => {
                           isShowLabel={false}
                           field={{
                             ...field,
-                            value: editForm[field.key],
-                            handleOnChange: (e) =>
-                              handleEditChange({ target: { name: field.key, value: e.target.value } })
+                            key: field.key,
+                            name: field.key,
+                            value: editForm[field.key] || '',
+                            handleOnChange: handleEditChange
                           }}
                         />
                       </td>
