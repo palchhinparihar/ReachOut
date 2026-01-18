@@ -4,7 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Navbar from './components/Navbar.jsx';
 import About from './components/About.jsx';
 import Logout from './components/Logout.jsx';
-import Particles from './components/ui/Particles.jsx';
+import LiquidEther from './components/ui/LiquidEther.jsx';
 import Footer from './components/Footer.jsx';
 
 // pages
@@ -19,18 +19,19 @@ function App() {
   return (
     <div className="relative min-h-screen">
       <div className="fixed top-0 left-0 w-full h-full -z-10">
-        <Particles
-          particleColors={['#ffffff', '#ffffff']}
-          particleCount={200}
-          particleSpread={10}
-          speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={true}
-          alphaParticles={false}
-          disableRotation={false}
+        <LiquidEther
+          enabledWaves={['top', 'middle', 'bottom']}
+          // Array - specify line count per wave; Number - same count for all waves
+          lineCount={[10, 15, 20]}
+          // Array - specify line distance per wave; Number - same distance for all waves
+          lineDistance={[8, 6, 4]}
+          bendRadius={5.0}
+          bendStrength={-0.5}
+          interactive={true}
+          parallax={true}
         />
       </div>
-      
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
