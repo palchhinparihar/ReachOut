@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Input from '../components/ui/Input';
 import { fields, statusOptions } from '../data/applicationInputData';
-import { FiEdit, FiTrash2, FiSave, FiX } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiSave, FiX, FiEye } from 'react-icons/fi';
+import Modal from '../components/ui/Modal';
 import { getDaysSince, getFollowUpStatus } from '../lib/followUpUtils';
 import FollowUpBadge from '../components/ui/FollowUpBadge';
 
@@ -20,6 +21,7 @@ const ApplicationList = () => {
   });
   const [actionLoading, setActionLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState('');
+  const [selectedApp, setSelectedApp] = useState(null);
 
   useEffect(() => {
     fetchApplications();
@@ -193,10 +195,10 @@ const ApplicationList = () => {
 
                     {/* Actions */}
                     <td className="px-4 py-2">
-                      <button onClick={() => handleEditSave(app.id)} className="text-green-500 mr-2">
+                      <button onClick={() => handleEditSave(app.id)} className="text-green-500 hover:scale-105 transition duration-300 cursor-pointer mr-2">
                         <FiSave size={22} />
                       </button>
-                      <button onClick={handleEditCancel} className="text-red-500">
+                      <button onClick={handleEditCancel} className="text-red-500 hover:scale-105 transition duration-300 cursor-pointer">
                         <FiX size={22} />
                       </button>
                     </td>
@@ -215,11 +217,14 @@ const ApplicationList = () => {
 
                     <td className="px-4 py-2 truncate max-w-xs">{app.notes}</td>
 
-                    <td className="px-4 py-2">
-                      <button onClick={() => handleEditClick(app)} className="text-blue-500 mr-2">
+                    <td className="px-4 py-2 flex gap-2">
+                      <button onClick={() => setSelectedApp(app)} className="text-purple-500 hover:scale-105 transition duration-300 cursor-pointer" title="View Details">
+                        <FiEye size={22} />
+                      </button>
+                      <button onClick={() => handleEditClick(app)} className="text-blue-500 hover:scale-105 transition duration-300 cursor-pointer">
                         <FiEdit size={22} />
                       </button>
-                      <button onClick={() => handleDelete(app.id)} className="text-red-500">
+                      <button onClick={() => handleDelete(app.id)} className="text-red-500 hover:scale-105 transition duration-300 cursor-pointer">
                         <FiTrash2 size={22} />
                       </button>
                     </td>
@@ -230,6 +235,45 @@ const ApplicationList = () => {
           })}
         </tbody>
       </table>
+
+      {/* Application Details Modal */}
+      <Modal isOpen={!!selectedApp} onClose={() => setSelectedApp(null)}>
+        {selectedApp && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-blue-500">
+              Application Details
+            </h2>
+
+            <div className="grid grid-cols-1 gap-3 text-sm">
+              {[
+                { label: 'Company', value: selectedApp.company, className: 'font-medium', rowClass: 'flex justify-between border-b border-gray-700 pb-2' },
+                { label: 'Role', value: selectedApp.role, className: 'font-medium', rowClass: 'flex justify-between border-b border-gray-700 pb-2' },
+                { label: 'Deadline', value: selectedApp.deadline || '—', className: 'font-medium', rowClass: 'flex justify-between border-b border-gray-700 pb-2' },
+                { label: 'Status', value: selectedApp.status, className: 'font-semibold', rowClass: 'flex justify-between border-b border-gray-700 pb-2' },
+              ].map(({ label, value, className, rowClass }) => (
+                <div key={label} className={rowClass}>
+                  <span className="text-gray-400">{label}</span>
+                  <span className={className}>{value}</span>
+                </div>
+              ))}
+
+              <div className="border-b border-gray-700 pb-2">
+                <span className="text-gray-400 block mb-1">Notes</span>
+                <p className="text-gray-200">
+                  {selectedApp.notes || "No notes added."}
+                </p>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-gray-400">Applied On</span>
+                <span className="font-medium">
+                  {new Date(selectedApp.created_at).toDateString()}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };
