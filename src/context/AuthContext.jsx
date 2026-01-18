@@ -19,9 +19,17 @@ export function AuthProvider({ children }) {
 
     // Listen to auth changes
     const { data: { subscription } } =
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          // Clear user state aggressively on sign out
+          setUser(null);
+          setLoading(false);
+          localStorage.clear();
+          sessionStorage.clear();
+        } else {
+          setUser(session.user ?? null);
+          setLoading(false);
+        }
       });
 
     return () => {

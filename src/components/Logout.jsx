@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
@@ -5,10 +6,16 @@ import { supabase } from '../lib/supabaseClient';
 export default function Logout() {
   const navigate = useNavigate();
   useEffect(() => {
-    supabase.auth.signOut().then(() => {
-      navigate('/login');
-      window.location.reload(); // Force reload to clear cached user state
-    });
+    const logout = async () => {
+      // Clear localStorage and sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+      // Sign out from Supabase
+      await supabase.auth.signOut();
+      // Navigate to login page
+      navigate('/login', { replace: true });
+    };
+    logout();
   }, [navigate]);
   return null;
 }
