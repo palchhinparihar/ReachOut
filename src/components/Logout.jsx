@@ -7,6 +7,7 @@ export default function Logout() {
   useEffect(() => {
     supabase.auth.signOut().then(() => {
       navigate('/login');
+      window.location.reload(); // Force reload to clear cached user state
     });
   }, [navigate]);
   return null;
