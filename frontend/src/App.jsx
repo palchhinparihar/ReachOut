@@ -1,13 +1,13 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
-import Logout from './pages/Logout.jsx';
+import Logout from './components/Logout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Navbar from './pages/Navbar.jsx';
 import Particles from './components/ui/Particles.jsx';
 import Dashboard from './pages/Dashboard.jsx'
-import ApplicationForm from './components/ApplicationForm.jsx';
-import ApplicationList from './components/ApplicationList.jsx';
+import ApplicationForm from './pages/ApplicationForm.jsx';
+import ApplicationList from './pages/ApplicationList.jsx';
 
 function App() {
   return (

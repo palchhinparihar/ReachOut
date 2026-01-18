@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import Input from './ui/Input';
-import Button from './ui/Button';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
 import { fields, statusOptions } from '../data/applicationInputData';
 
 const initialState = fields.reduce((acc, field) => {

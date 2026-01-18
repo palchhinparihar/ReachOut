@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import Input from './ui/Input';
+import Input from '../components/ui/Input';
 import { fields, statusOptions } from '../data/applicationInputData';
 import { FiEdit, FiTrash2, FiSave, FiX } from 'react-icons/fi';
 
@@ -11,6 +11,7 @@ const ApplicationList = () => {
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ company: '', role: '', deadline: '', status: '', notes: '' });
   const [actionLoading, setActionLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     fetchApplications();
@@ -91,14 +92,42 @@ const ApplicationList = () => {
     setEditForm({ company: '', role: '', deadline: '', status: '', notes: '' });
   };
 
+  // Filter and sort applications
+  let filteredApps = applications;
+  if (statusFilter) {
+    filteredApps = filteredApps.filter(app => app.status === statusFilter);
+  }
+  filteredApps = filteredApps.slice().sort((a, b) => {
+    if (!a.deadline) return 1;
+    if (!b.deadline) return -1;
+    return new Date(a.deadline) - new Date(b.deadline);
+  });
+
   if (loading) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-gray-500 py-8 animate-pulse">Loading applications...</p>;
   if (error) return <p className="min-h-[70vh] flex justify-center items-center text-center text-3xl md:text-4xl text-red-500 py-8">{error}</p>;
-  if (!applications.length) return <p className="min-h-[70vh] flex justify-center items-center text-3xl md:text-4xl text-center text-gray-500 py-8">No applications found.</p>;
+  if (!applications.length) return <p className="min-h-[70vh] flex justify-center items-center text-3xl md:text-4xl text-center text-gray-500 py-8">No applications yet — add one to get started.</p>;
 
   return (
     <section className="application-list overflow-x-auto w-full max-w-6xl mx-auto mt-14">
       <h1 className="text-3xl md:text-5xl text-center font-bold text-blue-500 mb-4">Your Applications</h1>
       <p className="text-base text-center text-gray-400 mb-10">Your application journey at a glance.</p>
+
+      {/* Filter by status */}
+      <div className="flex flex-col md:flex-row items-center justify-end gap-2 mb-4 mr-2">
+        <label htmlFor="statusFilter" className="font-semibold text-gray-300">Filter by status:</label>
+        <select
+          id="statusFilter"
+          name="statusFilter"
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value)}
+          className="border rounded px-2 py-1 bg-gray-900 text-white"
+        >
+          <option value="">All</option>
+          {statusOptions.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
 
       <table className="min-w-full shadow-lg rounded-lg overflow-hidden">
         <thead className="text-white border-b border-gray-700">
@@ -109,7 +138,11 @@ const ApplicationList = () => {
           </tr>
         </thead>
         <tbody>
-          {applications.map((app, idx) => (
+          {filteredApps.length === 0 ? (
+            <tr>
+              <td colSpan={7} className="text-center text-gray-400 py-8">No applications match this filter.</td>
+            </tr>
+          ) : filteredApps.map((app, idx) => (
             <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}>
               {editingId === app.id ? (
                 <>
