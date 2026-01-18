@@ -7,6 +7,11 @@ import Logout from './components/Logout.jsx';
 import LiquidEther from './components/ui/LiquidEther.jsx';
 import Footer from './components/Footer.jsx';
 
+// resources
+import CoverLetterHelp from './components/resources/CoverLetterHelp.jsx';
+import ResumeTips from './components/resources/ResumeTips.jsx';
+import InterviewPrep from './components/resources/InterviewPrep.jsx';
+
 // pages
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
@@ -36,6 +41,33 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/logout" element={<Logout />} />
+
+        <Route path="/resources/">
+          <Route path="cover-letter-help" element={
+            <ProtectedRoute>
+              <Navbar />
+              <CoverLetterHelp />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="resume-tips" element={
+            <ProtectedRoute>
+              <Navbar />
+              <ResumeTips />
+              <Footer />
+            </ProtectedRoute>
+          } />
+
+          <Route path="interview-prep" element={
+            <ProtectedRoute>
+              <Navbar />
+              <InterviewPrep />
+              <Footer />
+            </ProtectedRoute>
+          } />
+        </Route>
+
         <Route path="/about" element={
           <ProtectedRoute>
             <Navbar />

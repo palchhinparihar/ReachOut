@@ -12,9 +12,15 @@ const footerLinks = [
   { to: '/followup', label: 'Follow Up' },
 ];
 
+const resourcesLinks = [
+  { to: '/resources/resume-tips', label: 'Resume Writing Tips' },
+  { to: '/resources/interview-prep', label: 'Interview Preparation' },
+  { to: '/resources/cover-letter-help', label: 'Cover Letter Help' },
+]
+
 const Footer = () => {
   const { user } = useAuth();
-  
+
   return (
     <footer className="border-t border-gray-800 mt-16 backdrop-blur-xs bg-black/5">
       <div className="w-full md:w-3/4 mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-gray-400">
@@ -34,36 +40,35 @@ const Footer = () => {
           <h3 className="text-white font-semibold mb-3">Explore</h3>
           <div className="flex flex-col gap-2">
             {user && footerLinks.map(link => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                `hover:text-blue-200 transition font-medium ${isActive ? 'text-blue-500' : ''}`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  `hover:text-blue-200 transition font-medium ${isActive ? 'text-blue-500' : ''}`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
           </div>
         </div>
 
         {/* Resources & Tips */}
         <div className="flex flex-col h-full justify-center items-start">
           <h3 className="text-white font-semibold mb-3">Resources & Tips</h3>
-          <ul className="space-y-2">
-            <li>
-              <a href="https://resumegenius.com/resume-help/resume-tips" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition">Resume Writing Tips</a>
-            </li>
-            <li>
-              <a href="https://www.indeed.com/career-advice/interviewing" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition">Interview Preparation</a>
-            </li>
-            <li>
-              <a href="https://www.livecareer.com/resources/cover-letters/how-to/write" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition">Cover Letter Help</a>
-            </li>
-            <li>
-              <a href="https://www.grammarly.com/blog/email-writing/" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition">Professional Email Tips</a>
-            </li>
-          </ul>
+          <div className="flex flex-col gap-2">
+            {user && resourcesLinks.map(link => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  `hover:text-blue-200 transition font-medium ${isActive ? 'text-blue-500' : ''}`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </div>
         </div>
 
         {/* Social Links */}
@@ -87,7 +92,7 @@ const Footer = () => {
       <div className="text-xs md:text-sm text-center mt-2 mb-6 pt-3 border-t border-gray-500 w-full md:w-1/4 mx-auto text-gray-400">
         Made with {" "}
         <FaHeart className="inline text-red-500" />{" "}
-        by Palchhin 
+        by Palchhin
       </div>
     </footer>
   );
