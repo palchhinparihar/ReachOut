@@ -1,7 +1,8 @@
-
 # ReachOut
 
 ReachOut is a modern web application designed to connect individuals and organizations for support, collaboration, and resource sharing. It streamlines the process of submitting, managing, and reviewing applications for assistance or partnership, making it easier for users to reach out and get the help they need. All backend and authentication services are handled via Supabase, ensuring secure and scalable data management.
+
+<img width="1903" height="903" alt="Screenshot 2026-01-18 205526" src="https://github.com/user-attachments/assets/78f83a24-2e8a-4dd1-8449-3019e6d05cae" />
 
 ---
 
