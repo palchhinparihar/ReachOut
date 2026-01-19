@@ -23,9 +23,10 @@ export default function Login() {
     else navigate('/dashboard');
   };
 
-  const handleOnChange = (e, fieldType) => {
-    if (fieldType === 'email') setEmail(e.target.value);
-    else setPassword(e.target.value);
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'email') setEmail(value);
+    else setPassword(value);
   };
 
   const handleOAuthLogin = async (provider) => {
@@ -45,7 +46,13 @@ export default function Login() {
         </div>
 
         {inputFields.map((field) => (
-          <Input key={field?.type} field={field} value={field?.type === 'email' ? email : password} handleOnChange={handleOnChange} />
+          <Input
+            key={field?.type}
+            field={field}
+            value={field?.type === 'email' ? email : password}
+            handleOnChange={handleOnChange}
+            name={field?.type}
+          />
         ))}
 
         {error && <div className="text-red-500 mb-4">{error}</div>}

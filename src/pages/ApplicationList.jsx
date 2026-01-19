@@ -6,12 +6,13 @@ import { FiEdit, FiTrash2, FiSave, FiX, FiEye } from 'react-icons/fi';
 import Modal from '../components/ui/Modal';
 import { getDaysSince, getFollowUpStatus } from '../lib/followUpUtils';
 import FollowUpBadge from '../components/ui/FollowUpBadge';
+import Button from '@/components/ui/Button';
 
 const ApplicationList = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [editingId, setEditingId] = useState(null);
+  const [editingApp, setEditingApp] = useState(null);
   const [editForm, setEditForm] = useState({
     company: '',
     role: '',
@@ -60,14 +61,16 @@ const ApplicationList = () => {
   };
 
   const handleEditClick = (app) => {
-    setEditingId(app.id);
-    setEditForm({
-      company: app.company || '',
-      role: app.role || '',
-      deadline: app.deadline || '',
-      status: app.status || '',
-      notes: app.notes || '',
+    setEditingApp(app);
+    // Dynamically initialize editForm with all fields from fields array
+    const newEditForm = {};
+    fields.forEach(field => {
+      newEditForm[field.key] = app[field.key] || '';
     });
+    // Also ensure status and notes are included (if not in fields)
+    if (!newEditForm.hasOwnProperty('status')) newEditForm.status = app.status || '';
+    if (!newEditForm.hasOwnProperty('notes')) newEditForm.notes = app.notes || '';
+    setEditForm(newEditForm);
   };
 
   const handleEditChange = (e) => {
@@ -75,14 +78,15 @@ const ApplicationList = () => {
     setEditForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleEditSave = async (id) => {
+  const handleEditSave = async () => {
+    if (!editingApp) return;
     setActionLoading(true);
     try {
-      await supabase.from('applications').update(editForm).eq('id', id);
+      await supabase.from('applications').update(editForm).eq('id', editingApp.id);
       setApplications(applications.map(app =>
-        app.id === id ? { ...app, ...editForm } : app
+        app.id === editingApp.id ? { ...app, ...editForm } : app
       ));
-      setEditingId(null);
+      setEditingApp(null);
     } catch {
       setError('Failed to update application.');
     } finally {
@@ -91,7 +95,7 @@ const ApplicationList = () => {
   };
 
   const handleEditCancel = () => {
-    setEditingId(null);
+    setEditingApp(null);
     setEditForm({ company: '', role: '', deadline: '', status: '', notes: '' });
   };
 
@@ -150,87 +154,29 @@ const ApplicationList = () => {
 
             return (
               <tr key={app.id} className={idx % 2 === 0 ? "bg-gray-900" : "bg-gray-800"}>
-                {editingId === app.id ? (
-                  <>
-                    {fields.map(field => (
-                      <td key={field.key} className="px-4 py-2">
-                        <Input
-                          isShowLabel={false}
-                          field={{
-                            ...field,
-                            key: field.key,
-                            name: field.key,
-                            value: editForm[field.key] || '',
-                            handleOnChange: handleEditChange
-                          }}
-                        />
-                      </td>
-                    ))}
+                <td className="px-6 py-2 min-w-22.5">{app.company}</td>
+                <td className="px-6 py-2 min-w-22.5">{app.role}</td>
+                <td className="px-6 py-2 min-w-22.5">{app.deadline}</td>
+                <td className="px-6 py-2 min-w-22.5 font-semibold">{app.status}</td>
 
-                    {/* Status */}
-                    <td className="px-4 py-2">
-                      <select
-                        name="status"
-                        value={editForm.status}
-                        onChange={handleEditChange}
-                        className="w-full bg-black border rounded p-2"
-                      >
-                        {statusOptions.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                      </select>
-                    </td>
+                {/* ⭐ Follow-up intelligence */}
+                <td className="px-6 py-2 min-w-22.5">
+                  <FollowUpBadge status={followUpStatus} />
+                </td>
 
-                    {/* Follow-up placeholder */}
-                    <td className="px-4 py-2 text-gray-400 italic">Auto</td>
+                <td className="px-6 py-2 min-w-22.5 truncate max-w-xs">{app.notes}</td>
 
-                    {/* Notes */}
-                    <td className="px-4 py-2">
-                      <textarea
-                        name="notes"
-                        value={editForm.notes}
-                        onChange={handleEditChange}
-                        className="w-full bg-black border rounded p-2"
-                      />
-                    </td>
-
-                    {/* Actions */}
-                    <td className="px-4 py-2">
-                      <button onClick={() => handleEditSave(app.id)} className="text-green-500 hover:scale-105 transition duration-300 cursor-pointer mr-2">
-                        <FiSave size={22} />
-                      </button>
-                      <button onClick={handleEditCancel} className="text-red-500 hover:scale-105 transition duration-300 cursor-pointer">
-                        <FiX size={22} />
-                      </button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td className="px-4 py-2">{app.company}</td>
-                    <td className="px-4 py-2">{app.role}</td>
-                    <td className="px-4 py-2">{app.deadline}</td>
-                    <td className="px-4 py-2 font-semibold">{app.status}</td>
-
-                    {/* ⭐ Follow-up intelligence */}
-                    <td className="px-4 py-2">
-                      <FollowUpBadge status={followUpStatus} />
-                    </td>
-
-                    <td className="px-4 py-2 truncate max-w-xs">{app.notes}</td>
-
-                    <td className="px-4 py-2 flex gap-2">
-                      <button onClick={() => setSelectedApp(app)} className="text-purple-500 hover:scale-105 transition duration-300 cursor-pointer" title="View Details">
-                        <FiEye size={22} />
-                      </button>
-                      <button onClick={() => handleEditClick(app)} className="text-blue-500 hover:scale-105 transition duration-300 cursor-pointer">
-                        <FiEdit size={22} />
-                      </button>
-                      <button onClick={() => handleDelete(app.id)} className="text-red-500 hover:scale-105 transition duration-300 cursor-pointer">
-                        <FiTrash2 size={22} />
-                      </button>
-                    </td>
-                  </>
-                )}
+                <td className="px-6 py-2 min-w-22.5 flex gap-2">
+                  <button onClick={() => setSelectedApp(app)} className="text-purple-500 hover:scale-105 transition duration-300 cursor-pointer" title="View Details">
+                    <FiEye size={22} />
+                  </button>
+                  <button onClick={() => handleEditClick(app)} className="text-blue-500 hover:scale-105 transition duration-300 cursor-pointer">
+                    <FiEdit size={22} />
+                  </button>
+                  <button onClick={() => handleDelete(app.id)} className="text-red-500 hover:scale-105 transition duration-300 cursor-pointer">
+                    <FiTrash2 size={22} />
+                  </button>
+                </td>
               </tr>
             );
           })}
@@ -272,6 +218,58 @@ const ApplicationList = () => {
                 </span>
               </div>
             </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Application Edit Modal */}
+      <Modal isOpen={!!editingApp} onClose={handleEditCancel}>
+        {editingApp && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-blue-500 mb-4">Edit Application</h2>
+            <form onSubmit={e => { e.preventDefault(); handleEditSave(); }} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {fields.map(field => (
+                  <Input
+                    key={field.key}
+                    isShowLabel={true}
+                    field={field}
+                    value={editForm[field.key] || ''}
+                    handleOnChange={handleEditChange}
+                  />
+                ))}
+                <div>
+                  <label className="block text-gray-400 mb-1">Status</label>
+                  <select
+                    name="status"
+                    value={editForm.status}
+                    onChange={handleEditChange}
+                    className="w-full border rounded p-2"
+                  >
+                    {statusOptions.map(opt => (
+                      <option key={opt} value={opt} className="bg-gray-950">{opt}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-gray-400 mb-1">Notes</label>
+                  <textarea
+                    name="notes"
+                    value={editForm.notes}
+                    onChange={handleEditChange}
+                    className="w-full border rounded p-2 min-h-15"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
+                <button type="button" onClick={handleEditCancel} className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white disabled:border-gray-400 disabled:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed font-semibold w-full md:w-1/3 mx-auto text-base md:text-lg flex justify-center items-center text-center transition duration-300 cursor-pointer py-2 rounded-lg">
+                  Cancel
+                </button>
+                <button type="submit" disabled={actionLoading} className="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white disabled:border-gray-400 disabled:text-gray-400 disabled:hover:bg-transparent disabled:cursor-not-allowed font-semibold w-full md:w-1/3 mx-auto text-base md:text-lg flex justify-center items-center text-center transition duration-300 cursor-pointer py-2 rounded-lg">
+                  {actionLoading ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </Modal>
